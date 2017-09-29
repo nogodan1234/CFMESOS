@@ -1,0 +1,54 @@
+#for dir in $(ls -l | awk '{print $9}' | cut -d '.' -f 1) ; do mkdir $dir;mv $dir.*.xz $dir;done
+#for dir in $(ls -l | awk '{print $9}') ; do cd $dir ; tar xvf $dir*.tar*;cd .. ; done
+mkdir /tmp/tachoi
+fgrep -r -i err . > /tmp/tachoi/err.txt
+fgrep -r -i fatal . > /tmp/tachoi/fatal.txt
+fgrep -r -i exception . > /tmp/tachoi/exception.txt
+fgrep -r -i "FATAL -- : Error caught" . >> /tmp/tachoi/fatal.txt
+fgrep -r -i " Unable to perform refresh for the following targets:" . > /tmp/tachoi/targetrefresh_err.txt
+fgrep -r -i "Connection refused" . > /tmp/tachoi/connection_err.txt
+
+fgrep -r NoMethodError . > /tmp/tachoi/nomethod.txt
+fgrep -r "rc=MIQ_STOP" . > /tmp/tachoi/miq_stop.txt
+fgrep -r "Server Role" . | grep -i last_startup.txt > /tmp/tachoi/role.txt
+fgrep -r "MemTotal:" . | grep -i last_startup.txt > /tmp/tachoi/inventory.txt
+fgrep -r   "MemAvailable:" . | grep -i last_startup.txt >> /tmp/tachoi/inventory.txt
+fgrep -r processor . | grep -v -i role |grep -v -i worker |grep -i last_startup.txt >> /tmp/tachoi/inventory.txt
+fgrep -r "cpu MHz" . | grep -i last_startup.txt >> /tmp/tachoi/inventory.txt
+fgrep -r "Segmentation fault" . > /tmp/tachoi/seg_fault.txt
+
+#https://bugzilla.redhat.com/show_bug.cgi?id=1435141
+fgrep -r -i "pubsub_adapter" > /tmp/tachoi/pubsub.txt
+
+#https://bugzilla.redhat.com/show_bug.cgi?id=1354635
+fgrep -r "Session object size of 1 MB exceeds" . > /tmp/tachoi/1mb.txt
+
+#db inconsistency
+#select distinct resource_type from relationships ;
+#>bads = Relationship.where(:resource_type=>'VmOrTemplate').select {|r| r.resource.nil?}
+#>bads.each {|b| b.destroy}
+fgrep -r "ActiveRecord::RecordNotFound" . > /tmp/tachoi/activeerr.txt
+#https://gss--c.na7.visual.force.com/apex/Case_View?id=500A000000XOkqt&sfdc.override=1
+fgrep -r "InvalidRequest: Request missing value for required parameter" . > /tmp/tachoi/missing_value.txt
+
+
+#worker restart issue
+fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "requesting worker to exit" > /tmp/tachoi/worker_exit.txt
+fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "restarting worker" | grep "has not responded" > /tmp/tachoi/worker_noresponse.txt
+fgrep -r "MIQ(MiqServer#start_algorithm_used_swap_percent_lt_value)" | grep "Not allowing worker" > /tmp/tachoi/worker_swap.txt
+
+#Performance check
+#grep 'count for state=\["dequeue"\]' evm.log
+#"Dequeued in" value
+#"Delivered in" value 
+
+#Any lines matched by this search can be traced back using the PID field in the log line to determine
+#the operation that was in process when the message timeout occurred.
+egrep -r "Message id: \[\d+\], timed out after" . > /tmp/tachoi/msg_timeout.txt
+
+
+#Check full refresh time info for each step
+fgrep -r "Refreshing targets for EMS...Complete" . > /tmp/tachoi/full_refresh.txt
+
+#https://bugzilla.redhat.com/show_bug.cgi?id=1341867
+fgrep -r "Unable to mount filesystem.  Reason" . > /tmp/tachoi/SSA_mount.txt
