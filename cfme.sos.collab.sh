@@ -35,7 +35,7 @@ fgrep -r "InvalidRequest: Request missing value for required parameter" . > /tmp
 #worker restart issue
 fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "requesting worker to exit" > /tmp/tachoi/worker_exit.txt
 fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "restarting worker" | grep "has not responded" > /tmp/tachoi/worker_noresponse.txt
-fgrep -r "MIQ(MiqServer#start_algorithm_used_swap_percent_lt_value)" | grep "Not allowing worker" > /tmp/tachoi/worker_swap.txt
+fgrep -r "MIQ(MiqServer#start_algorithm_used_swap_percent_lt_value)" . | grep "Not allowing worker" > /tmp/tachoi/worker_swap.txt
 
 #Performance check
 #grep 'count for state=\["dequeue"\]' evm.log
@@ -52,3 +52,11 @@ fgrep -r "Refreshing targets for EMS...Complete" . > /tmp/tachoi/full_refresh.tx
 
 #https://bugzilla.redhat.com/show_bug.cgi?id=1341867
 fgrep -r "Unable to mount filesystem.  Reason" . > /tmp/tachoi/SSA_mount.txt
+
+#seeding issue 
+fgrep -r "You cannot call create unless the parent is saved" . > /tmp/tachoi/Seeding.txt
+#https://gss--c.na7.visual.force.com/apex/Case_View?srPos=0&srKp=500&id=500A000000Yfsu2&sfdc.override=1#comment_a0aA000000KundiIAB
+
+#Azure string err - https://bugzilla.redhat.com/show_bug.cgi?id=1504314
+fgrep -r "can't convert String into time interval" . > /tmp/tachoi/azure_string.txt
+
