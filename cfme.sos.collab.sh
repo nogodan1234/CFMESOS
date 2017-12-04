@@ -1,5 +1,6 @@
 #for dir in $(ls -l | awk '{print $9}' | cut -d '.' -f 1) ; do mkdir $dir;mv $dir.*.xz $dir;done
 #for dir in $(ls -l | awk '{print $9}') ; do cd $dir ; tar xvf $dir*.tar*;cd .. ; done
+rm -rf /tmp/tachoi
 mkdir /tmp/tachoi
 fgrep -r -i err . > /tmp/tachoi/err.txt
 fgrep -r -i fatal . > /tmp/tachoi/fatal.txt
@@ -16,6 +17,7 @@ fgrep -r   "MemAvailable:" . | grep -i last_startup.txt >> /tmp/tachoi/inventory
 fgrep -r processor . | grep -v -i role |grep -v -i worker |grep -i last_startup.txt >> /tmp/tachoi/inventory.txt
 fgrep -r "cpu MHz" . | grep -i last_startup.txt >> /tmp/tachoi/inventory.txt
 fgrep -r "Segmentation fault" . > /tmp/tachoi/seg_fault.txt
+fgrep -r "CloudManager::Vm#perform_metadata_scan\|CloudManager::Vm#scan_via_miq_vm) Completed:" . > /tmp/tachoi/SSA_time.txt
 
 #https://bugzilla.redhat.com/show_bug.cgi?id=1435141
 fgrep -r -i "pubsub_adapter" > /tmp/tachoi/pubsub.txt
@@ -59,4 +61,5 @@ fgrep -r "You cannot call create unless the parent is saved" . > /tmp/tachoi/See
 
 #Azure string err - https://bugzilla.redhat.com/show_bug.cgi?id=1504314
 fgrep -r "can't convert String into time interval" . > /tmp/tachoi/azure_string.txt
+
 
