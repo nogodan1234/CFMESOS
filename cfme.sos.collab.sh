@@ -62,4 +62,7 @@ fgrep -r "You cannot call create unless the parent is saved" . > /tmp/tachoi/See
 #Azure string err - https://bugzilla.redhat.com/show_bug.cgi?id=1504314
 fgrep -r "can't convert String into time interval" . > /tmp/tachoi/azure_string.txt
 
+#OSP excon timeout reached bz: 1522842
+fgrep -r "[ERROR -- : excon.error     #<Excon::Error::Timeout: read timeout reached>" . > /tmp/tachoi/excon_timeout.txt
+
 
