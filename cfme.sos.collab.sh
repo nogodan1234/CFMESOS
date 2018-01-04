@@ -36,6 +36,7 @@ fgrep -r "InvalidRequest: Request missing value for required parameter" . > /tmp
 
 #worker restart issue
 fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "requesting worker to exit" > /tmp/tachoi/worker_exit.txt
+fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "requesting worker to exit" | awk '{print $10}' | sort -u >> /tmp/tachoi/worker_exit.txt
 fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "restarting worker" | grep "has not responded" > /tmp/tachoi/worker_noresponse.txt
 fgrep -r "MIQ(MiqServer#start_algorithm_used_swap_percent_lt_value)" . | grep "Not allowing worker" > /tmp/tachoi/worker_swap.txt
 
