@@ -39,6 +39,8 @@ fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "req
 echo "#### Worker needs increase memory ###" >> /tmp/tachoi/worker_exit.txt
 fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "requesting worker to exit" | awk '{print $10}' | sort -u >> /tmp/tachoi/worker_exit.txt
 fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "restarting worker" | grep "has not responded" > /tmp/tachoi/worker_noresponse.txt
+echo "#### Worker that hasn't been responded in time ####" >> /tmp/tachoi/worker_noresponse.txt
+fgrep -r "MiqServer#validate_worker" . |grep -v "uptime has reached" | grep "restarting worker" | grep "has not responded"| awk '{print $10}' | sort -u >> /tmp/tachoi/worker_noresponse.txt
 fgrep -r "MIQ(MiqServer#start_algorithm_used_swap_percent_lt_value)" . | grep "Not allowing worker" > /tmp/tachoi/worker_swap.txt
 
 #Performance check
