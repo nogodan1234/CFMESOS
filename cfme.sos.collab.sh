@@ -73,7 +73,11 @@ fgrep -r "[ERROR -- : excon.error     #<Excon::Error::Timeout: read timeout reac
 echo "#### Event Storm Check ####" > /tmp/tachoi/event_strom.txt
 fgrep -r "Processing EMS event" . | grep Complete | awk '{print $12}' | wc -l >> /tmp/tachoi/event_strom.txt
 echo "#### Event name ####" >> /tmp/tachoi/event_strom.txt
-fgrep -r "Processing EMS event" . | grep Complete | awk '{print $12}' | sort -u >> /tmp/tachoi/event_strom.txt
+fgrep -r "Processing EMS event" . | grep Complete | awk '{print $12}' | sort -u >> /tmp/tachoi/event.txt
+sed -i -e 's/\[//g' /tmp/tachoi/event.txt
+sed -i -e 's/\]//g' event.txt
+for id in $(cat /tmp/tachoi/event.txt); do grep $id evm.log |grep Complete |wc -l ;done >> /tmp/tachoi/event.txt
+
 #for id in $(cat event.txt); do grep $id evm.log |grep Complete |wc -l ;done
 
 
