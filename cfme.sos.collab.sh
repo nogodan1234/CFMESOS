@@ -50,7 +50,7 @@ fgrep -r "MIQ(MiqServer#start_algorithm_used_swap_percent_lt_value)" . | grep "N
 
 #Any lines matched by this search can be traced back using the PID field in the log line to determine
 #the operation that was in process when the message timeout occurred.
-egrep -r "Message id: \[\d+\], timed out after" . > /tmp/tachoi/msg_timeout.txt
+fgrep -r "Message id: \[\d+\], timed out after" . > /tmp/tachoi/msg_timeout.txt
 
 
 #Check full refresh time info for each step
@@ -68,5 +68,14 @@ fgrep -r "can't convert String into time interval" . > /tmp/tachoi/azure_string.
 
 #OSP excon timeout reached bz: 1522842
 fgrep -r "[ERROR -- : excon.error     #<Excon::Error::Timeout: read timeout reached>" . > /tmp/tachoi/excon_timeout.txt
+
+#Event Storm from provider
+echo "#### Event Storm Check ####" > /tmp/tachoi/event_strom.txt
+fgrep -r "Processing EMS event" . | grep Complete | awk '{print $12}' | wc -l >> /tmp/tachoi/event_strom.txt
+echo "#### Event name ####" >> /tmp/tachoi/event_strom.txt
+fgrep -r "Processing EMS event" . | grep Complete | awk '{print $12}' | sort -u >> /tmp/tachoi/event_strom.txt
+#for id in $(cat event.txt); do grep $id evm.log |grep Complete |wc -l ;done
+
+
 
 
